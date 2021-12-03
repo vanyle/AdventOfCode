@@ -25,13 +25,6 @@ proc filter(switch: bool): string =
         pos += 1
     return lines[lines_indices[0]]
 
-proc binToDec(s: string): int = 
-    result = 0
-    for i in 0..<s.len:
-        result *= 2
-        if s[i] == '1':
-            result += 1 
-
-var oxygen_rating = binToDec(filter(false))
-var co2_rating = binToDec(filter(true))
-echo "Result:",oxygen_rating * co2_rating
+var oxygen_rating = parseBinInt(filter(false))
+var co2_rating = parseBinInt(filter(true))
+echo "Result: ",oxygen_rating * co2_rating
