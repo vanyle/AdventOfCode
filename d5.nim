@@ -15,7 +15,7 @@ var coordsLines = lines.map(
 )
 
 
-proc addIntersections(t: var Table[pos,bool], l1: seq[int], l2: seq[int]): bool =
+proc addIntersections(t: var Table[pos,bool], l1: seq[int], l2: seq[int]) =
 
     if l1[0] == l1[2]:
         # l1 vertical
@@ -27,12 +27,10 @@ proc addIntersections(t: var Table[pos,bool], l1: seq[int], l2: seq[int]): bool 
             
             for i in max(min1,min2) .. min(max1,max2):
                 t[(l1[0],i)] = true
-            return true
         if l2[1] == l2[3] and min(l2[0],l2[2]) <= l1[0] and l1[0] <= max(l2[0],l2[2]):
             # l2 horizontal
             if min(l1[1],l1[3]) <= l2[1] and l2[1] <= max(l1[1],l1[3]):
                 t[(l1[0],l2[1])] = true
-                return true
     elif l1[1] == l1[3]:
         # l1 horizontal
         if l2[1] == l2[3] and l1[1] == l2[1]:
@@ -42,13 +40,10 @@ proc addIntersections(t: var Table[pos,bool], l1: seq[int], l2: seq[int]): bool 
             let max2 = max(l2[0],l2[2])
             for i in max(min1,min2) .. min(max1,max2):
                 t[(i,l1[1])] = true
-            return true
         if l2[0] == l2[2] and min(l2[1],l2[3]) <= l1[1] and l1[1] <= max(l2[1],l2[3]):
             # l2 horizontal
             if min(l1[0],l1[2]) <= l2[0] and l2[0] <= max(l1[0],l1[2]):
                 t[(l2[0],l1[1])] = true
-                return true
-    return false
 
 
 var intersections = initTable[pos,bool]()
@@ -60,8 +55,7 @@ for i in 0..<coordsLines.len:
     for j in (i+1)..<coordsLines.len:
         if coordsLines[j][0] != coordsLines[j][2] and coordsLines[j][1] != coordsLines[j][3]:  
             continue
-        discard intersections.addIntersections(coordsLines[i],coordsLines[j])
-        
+        intersections.addIntersections(coordsLines[i],coordsLines[j])
 
 
 echo "Result: ",intersections.len
