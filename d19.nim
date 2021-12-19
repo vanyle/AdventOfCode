@@ -59,15 +59,16 @@ for sc in scanners:
 proc match(i,j: int): tuple[s: HashSet[pos], b: pos] =
 	let scanA = scanners[i]
 	let scanB = scanners[j]
-	var mayMatch = false
+	var mayMatchCount = 0
 	for e in diffTable[i]:
 		for f in diffTable[j]:
-			if e == f:
-				mayMatch = true
+			if mayMatchCount >= 11*11:
 				break
-		if mayMatch:
+			if e == f:
+				mayMatchCount += 1
+		if mayMatchCount >= 11*11:
 			break
-	if not mayMatch:
+	if mayMatchCount < 11*11:
 		# There cannot be any beacon in common no matter the orientation considered
 		return (s: initHashSet[pos](), b: (0,0,0))
 
@@ -97,6 +98,7 @@ proc match(i,j: int): tuple[s: HashSet[pos], b: pos] =
 						let rev1 = unrotate(dx, dy, dz, ori)
 						return (s: rev0, b: rev1)
 					i += 1
+
 	return (s: initHashSet[pos](), b: (0,0,0))
 
 
