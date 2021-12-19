@@ -12,6 +12,8 @@ func process(s: string): HashSet[pos] =
 		var tmp = r[i].split(",").map(parseInt)
 		result.incl((tmp[0], tmp[1], tmp[2]))
 
+var scanners = sections.map(process)
+
 proc rotate(x, y, z: int, ori: seq[int]): pos =
 	var r = [0, 0, 0]
 	var axis = @[0, 1, 2]
@@ -44,7 +46,31 @@ for xneg in [-1,1]:
 						xneg,xaxis,yneg,yaxis,zneg
 					])	
 
-proc match(scanA,scanB: HashSet[pos]): tuple[s: HashSet[pos], b: pos] =
+var diffTable: seq[seq[HashSet[int]]] = @[]
+for sc in scanners:
+	var a: seq[HashSet[int]] = @[]
+	for b1 in sc:
+		for b2 in sc:
+			if b1 != b2:
+				let dp = @[abs(b1[0] - b2[0]), abs(b1[1] - b2[1]), abs(b1[2] - b2[2])]
+				a.add(dp.toHashSet)
+	diffTable.add(a)
+
+proc match(i,j: int): tuple[s: HashSet[pos], b: pos] =
+	let scanA = scanners[i]
+	let scanB = scanners[j]
+	var mayMatch = false
+	for e in diffTable[i]:
+		for f in diffTable[j]:
+			if e == f:
+				mayMatch = true
+				break
+		if mayMatch:
+			break
+	if not mayMatch:
+		# There cannot be any beacon in common no matter the orientation considered
+		return (s: initHashSet[pos](), b: (0,0,0))
+
 	for ori in orientations:
 		for v1 in scanA:
 			for v2 in scanB:
@@ -73,7 +99,6 @@ proc match(scanA,scanB: HashSet[pos]): tuple[s: HashSet[pos], b: pos] =
 					i += 1
 	return (s: initHashSet[pos](), b: (0,0,0))
 
-var scanners = sections.map(process)
 
 var tomatch = @[0]
 var matched: HashSet[int] = toHashSet(@[0])
@@ -87,9 +112,8 @@ while tomatch.len > 0:
 	echo tomatch
 	for sidx in tomatch:
 		for i,scanner in scanners.pairs():
-			echo i," / ",scanners.len
 			if i in matched: continue
-			var res = match(scanners[sidx], scanner)
+			var res = match(sidx, i)
 			if res.s.len > 0:
 				newtomatch.add(i)
 				matched.incl(i)
