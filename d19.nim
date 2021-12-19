@@ -36,15 +36,28 @@ proc unrotate(x, y, z: int, ori: seq[int]): pos =
     axis.delete(ori[3])
     result[2] = ins[axis[0]] * ori[4]
 
+# list the 24 orientations allowed
 var orientations: seq[seq[int]] = @[]
-for xneg in [-1,1]:
-	for xaxis in [0,1,2]:
+# We generate the elements of S4.
+				
+for permu in [0,1,2,3,4,5]:
+	for xneg in [-1,1]:
 		for yneg in [-1,1]:
-			for yaxis in [0,1]:
-				for zneg in [-1,1]:
-					orientations.add(@[
-						xneg,xaxis,yneg,yaxis,zneg
-					])	
+			let xnegb = xneg == -1
+			let ynegb = yneg == -1
+			let xaxis = permu mod 3
+			let yaxis = permu mod 2
+			
+			let zneg = if (xnegb == ynegb) != (permu in {3,4,5}) : 1 else: -1
+
+			orientations.add(@[
+				xneg,xaxis,yneg,yaxis,zneg
+			])
+
+# 1,2,3
+# --> -1,3,2
+
+echo orientations.len
 
 var diffTable: seq[seq[HashSet[int]]] = @[]
 for sc in scanners:
@@ -111,7 +124,6 @@ var scanners_pos: HashSet[pos] = @[(x: 0, y: 0, z: 0)].toHashSet
 
 while tomatch.len > 0:
 	var newtomatch: seq[int] = @[]
-	echo tomatch
 	for sidx in tomatch:
 		for i,scanner in scanners.pairs():
 			if i in matched: continue
