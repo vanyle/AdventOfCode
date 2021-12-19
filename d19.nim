@@ -54,11 +54,6 @@ for permu in [0,1,2,3,4,5]:
 				xneg,xaxis,yneg,yaxis,zneg
 			])
 
-# 1,2,3
-# --> -1,3,2
-
-echo orientations.len
-
 var diffTable: seq[seq[HashSet[int]]] = @[]
 for sc in scanners:
 	var a: seq[HashSet[int]] = @[]
@@ -123,6 +118,7 @@ var scanners_pos: HashSet[pos] = @[(x: 0, y: 0, z: 0)].toHashSet
 
 
 while tomatch.len > 0:
+	echo tomatch
 	var newtomatch: seq[int] = @[]
 	for sidx in tomatch:
 		for i,scanner in scanners.pairs():
