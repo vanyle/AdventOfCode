@@ -18,16 +18,6 @@ proc get(img: InfinImage,x,y: int): bool =
 	else:
 		return img.infinity
 
-proc disp(img: InfinImage) =
-	for i in -1..img.data.len:
-		var s = ""
-		for j in -1..img.data[0].len:
-			if img.get(j,i):
-				s &= '#'
-			else:
-				s &= "."
-		echo s
-
 proc enhance(img: InfinImage): InfinImage =
 	result.data = @[]
 	const infIndex: int = 511
