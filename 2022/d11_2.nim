@@ -1,4 +1,4 @@
-import strutils, strscans, sugar, sequtils, algorithm, math
+import strutils, strscans, sugar, sequtils, algorithm
 
 type Monkey = ref object # ref type not needed by the syntax is nicer with them.
     itemsHeld: seq[int]
@@ -28,7 +28,7 @@ for i in countup(0, lines.len-1, 7):
     assert scanf(lines[i+5],"    If false: throw to monkey $i", m.gotoFalse)
     monkeys.add(m)
 # Compute least common multiple of the test values (which are primes...)
-# It's as if somebody is trying to implement a shift-register machine...
+# It's as if somebody is trying to implement a [register machine](https://en.wikipedia.org/wiki/Register_machine)...
 var globalLcm = 1
 for m in monkeys:
     globalLcm *= m.divTest
