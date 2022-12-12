@@ -47,6 +47,9 @@ proc heuristic*( grid: seq[seq[char]], node, goal: (int,int)): float =
 
 var bestStepCount = grid.len * grid[0].len
 
+# Performance is bad. A better approach would be to go from E to
+# other places and stop at the first 'a' found.
+# However, computers are fast, so for this grid size this does not matter.
 for y in 0..<grid.len:
     for x in 0..<grid[y].len:
         if grid[y][x] == 'a':
@@ -56,7 +59,7 @@ for y in 0..<grid.len:
             for point in path[seq[seq[char]], (int,int), float](grid, start, goal):
                 inc stepCount
             if stepCount == 0: continue
-            
+
             if stepCount - 1 < bestStepCount:
                 bestStepCount = stepCount - 1 
 
