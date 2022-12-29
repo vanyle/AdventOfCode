@@ -67,11 +67,6 @@ proc pathFind(sx,sy,st: int, gx,gy: int): int =
 
     return st - 1 # unreachable.
 
-# Time to write a BFS !
-var front = @[(0,-1,0)].toDeque
-
-var maxX = 0
-
 # Trip 1: goal -> start
 var time1 = pathFind(0, -1, 0, width - 1, height)
 echo "Part 1: ",time1
